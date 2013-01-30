@@ -22,4 +22,68 @@
 \section*{Problem 1}
 
 
+\section*{Problem 2}
+
+\begin{enumerate}[label={\bf (\alph*)}]
+  \item \verb=100000001011010000011000000100010100000011100000001=
+  \item \verb=01001100000000=
+\end{enumerate}
+
+\section*{Problem 3}
+
+\begin{enumerate}[label={\bf (\alph*)}]
+  \item \verb=--1-011-001= $\rightarrow$ \verb=10100111001=
+  \item Syndrome: \verb=010=. The second bit is incorrect.
+\end{enumerate}
+
+\section*{Problem 4}
+
+If the CRC were appended as a header, it would need to be computed before the
+message is sent onto the link. By attaching it to the end, we can compute the
+CRC while transmitting the message.
+
+\section*{Problem 5}
+
+We can easily compute the round-trip time for a single packet-acknowledgement
+sequence by adding up the transmission and propagation delays (we are ignoring
+the processing and queueing delays):
+\begin{equation*}
+  \text{rtt} = d_{mt} + d_{mp} + d_{at} + d_{ap}
+\end{equation*}
+where $d_{mt}$ is the transmission delay for the message packet, $d_{mp}$ is the
+propagation delay for the packet, and likewise for the acknowledgement. We can
+now make the observation that transmission delay is $b/C$ and the propagation
+delay for both the file packets and the acknowledgement packets
+is $d\cdot5\times 10^{-6}$. The equation now becomes
+\begin{equation*}
+  \text{rtt} = \frac{b}{C} + \frac{100}{C} + 10\cdot d\times 10^{-6}
+\end{equation*}
+
+This is only for a single packet, but we can multiply it by the number of
+packets, $10^6 / b$, to find the total time for the whole file.
+\begin{equation*}
+  \text{time} = \frac{10^6}{b} \cdot \text{rtt}
+\end{equation*}
+
+Total bits transmitted is the size of the file plus the number of
+acknowledgement bits sent: $10^6 + 10^8/b$. Assuming throughput includes bits
+from ACKs.
+
+\begin{enumerate}[label={\bf (\alph*)}]
+
+  \item $\text{rtt} = 10^{-4} + 10^{-5} + 10^{-4}$.
+    Now, multiply by the number of packets: $10^4 \text{rtt} = 1 + 0.1 +
+    1 = 2.1 s$. The throughput is $(10^6 + 10^6) / 2.1 \approx 952$ kbps.
+  \item $\text{rtt} = 2\times 10^{-5} + 10^{-5} = 3\times 10^{-5}$. Multiplying
+    by number of packets ($10^4$ again) yields a total time of 0.3 seconds.
+    Throughput is $(10^6 + 10^6) / 0.3 \approx 6.67$ Mbps.
+  \item $\text{rtt} = 2\cdot 10^{-4} + 2\cdot 10^{-5}$. Multiply by number of
+    packets, once again $10^4$, yields 2.2 seconds for the total time.
+    Throughput is $(2\cdot10^6)/2.2 \approx 909$ kbps.
+  \item $\text{rtt} = 2\cdot10^{-4} + 2\cdot 10^{-6} + 2\cdot 10^{-6}$. Total
+    time is $100\cdot \text{rtt} = 2\cdot10^{-2} + 4\cdot10^{-4} \approx 0.0204$
+    seconds. Throughput is $(10^6 + 10^4)/0.0204 \approx 49.5$ Mbps.
+
+\end{enumerate}
+
 \end{document}
